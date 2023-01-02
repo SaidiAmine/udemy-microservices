@@ -1,0 +1,42 @@
+[
+  {
+    "loanNumber": 1,
+    "customerId": 1,
+    "startedAt": null,
+    "loanType": "Home",
+    "totalLoan": 200000,
+    "amountPaid": 50000,
+    "outstandingAmount": 150000,
+    "createdAt": null
+  },
+  {
+    "loanNumber": 2,
+    "customerId": 1,
+    "startedAt": null,
+    "loanType": "Vehicle",
+    "totalLoan": 40000,
+    "amountPaid": 10000,
+    "outstandingAmount": 30000,
+    "createdAt": null
+  },
+  {
+    "loanNumber": 3,
+    "customerId": 1,
+    "startedAt": null,
+    "loanType": "Home",
+    "totalLoan": 50000,
+    "amountPaid": 10000,
+    "outstandingAmount": 40000,
+    "createdAt": null
+  },
+  {
+    "loanNumber": 4,
+    "customerId": 1,
+    "startedAt": null,
+    "loanType": "Personal",
+    "totalLoan": 10000,
+    "amountPaid": 3500,
+    "outstandingAmount": 6500,
+    "createdAt": null
+  }
+]

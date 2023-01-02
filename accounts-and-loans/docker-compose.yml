@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+
+  udemy-tuto:
+    image: udemy/micro-service-one:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - main-network
+
+  udemy-tuto-two:
+    image: udemy/micro-service-one:latest
+    ports:
+      - "8081:8080"
+    networks:
+      - main-network
+
+networks:
+  main-network:
