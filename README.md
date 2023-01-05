@@ -31,3 +31,8 @@ under build>plugins>plugin>configuration to be able to build docker image with *
 ## Encrypting configuration values
 * Use configuration server endpoint /encrypt and pass the specific value to the body. (You can use /decrypt)
 * Update the configuration value on the git repository and add {cipher} on the beginning of the encrypted value
+
+## Spring cloud support for services discovery & registration
+* Spring cloud netflix's eureka service which will act as a service discovery agent
+* Spring cloud load balancer library for client-side load balancing
+* Netflix Feign client to look up for a service between microservices
