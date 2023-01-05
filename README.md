@@ -19,3 +19,15 @@ under build>plugins>plugin>configuration to be able to build docker image with *
 * docker ps
 * docker images
 * docker image rm -f image_id
+
+## Refreshing configuration properties values on runtime
+* Add `@RefreshScope` on the microservice main method
+* Add `management.endpoints.web.exposure.include=*` 
+* Make changes on the external configuration file
+* By now the changes are visible through the configuration server's endpoint (ex: localhost:8071/accounts/prod)
+* Make a POST call to the micro service's actuator endpoint (ex: localhost:8181/actuator/refresh) => shows the updated config properties at runtime
+* call the micro service's custom endpoint for config properties (ex: localhost:8181/account/properties) => values are up to date
+
+## Encrypting configuration values
+* Use configuration server endpoint /encrypt and pass the specific value to the body. (You can use /decrypt)
+* Update the configuration value on the git repository and add {cipher} on the beginning of the encrypted value
