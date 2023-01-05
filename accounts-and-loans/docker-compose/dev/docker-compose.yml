@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+
+  config-server:
+    image: saidiaminerepo/config-server:latest
+    ports:
+      - "8071:8071"
+    networks:
+      - main-network
+
+  accounts-and-loans:
+    image: saidiaminerepo/accounts-and-loans:latest
+    ports:
+      - "8181:8181"
+    networks:
+      - main-network
+    depends_on:
+      - config-server
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8071/
+
+networks:
+  main-network:
+

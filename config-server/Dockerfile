@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim as build
 MAINTAINER SaidiAmine
 
 # Add the application's jar to the container
-COPY target/accounts-and-loans-0.0.1-SNAPSHOT.jar accounts-and-loans-0.0.1-SNAPSHOT.jar
+COPY target/config-server-0.0.1-SNAPSHOT.jar config-server-0.0.1-SNAPSHOT.jar
 
 #execute the application
-ENTRYPOINT ["java","-jar","/accounts-and-loans-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/config-server-0.0.1-SNAPSHOT.jar"]
