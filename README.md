@@ -36,3 +36,9 @@ under build>plugins>plugin>configuration to be able to build docker image with *
 * Spring cloud netflix's eureka service which will act as a service discovery agent
 * Spring cloud load balancer library for client-side load balancing
 * Netflix Feign client to look up for a service between microservices
+
+## Eureka
+* Spring Cloud Eureka is a service registry that allows microservices to register themselves and discover other services in a distributed environment.
+* Create Eureka server with Eureka server dependency.
+* Add Eureka client dependency to microservice
+* Set `eureka.client.serviceUrl.defaultZone` on the micro service app properties 
