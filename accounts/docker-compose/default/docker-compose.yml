@@ -1,0 +1,124 @@
+version: "3.8"
+
+services:
+
+  configserver:
+    image: saidiaminerepo/configserver-udemy-ms:latest
+    mem_limit: 700m
+    ports:
+      - "8071:8071"
+    networks:
+     - my-network
+   
+  eurekaserver:
+    image: saidiaminerepo/eurekaserver-udemy-ms:latest
+    mem_limit: 700m
+    ports:
+      - "8070:8070"
+    networks:
+     - my-network
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 15s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_APPLICATION_NAME: eurekaserver
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      
+  accounts:
+    image: saidiaminerepo/accounts-udemy-ms:latest
+    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network
+    depends_on:
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_APPLICATION_NAME: accounts
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+
+# adding an instance for microservice account / change the exposed port, the internal ports inside docker don't go on conflict as each container is resilient
+#  accounts1:
+#    image: saidiaminerepo/accounts-udemy-ms:latest
+#    mem_limit: 700m
+#    ports:
+#      - "8081:8080"
+#    networks:
+#      - my-network
+#    depends_on:
+#      - configserver
+#      - eurekaserver
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        delay: 30s
+#        max_attempts: 3
+#        window: 120s
+#    environment:
+#      SPRING_APPLICATION_NAME: accounts
+#      SPRING_PROFILES_ACTIVE: default
+#      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+
+  
+  loans:
+    image: saidiaminerepo/loans-udemy-ms:latest
+    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    networks:
+      - my-network
+    depends_on:
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_APPLICATION_NAME: loans
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    
+  cards:
+    image: saidiaminerepo/cards-udemy-ms:latest
+    mem_limit: 700m
+    ports:
+      - "9000:9000"
+    networks:
+      - my-network
+    depends_on:
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_APPLICATION_NAME: cards
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      
+networks:
+  my-network:

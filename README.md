@@ -41,4 +41,7 @@ under build>plugins>plugin>configuration to be able to build docker image with *
 * Spring Cloud Eureka is a service registry that allows microservices to register themselves and discover other services in a distributed environment.
 * Create Eureka server with Eureka server dependency.
 * Add Eureka client dependency to microservice
-* Set `eureka.client.serviceUrl.defaultZone` on the micro service app properties 
+* Set `eureka.client.serviceUrl.defaultZone` on the micro service app properties
+
+## Heartbeat
+A heartbeat signal is sent from each micro service (accounts loans ..) to the eureka server, to signal them that they are still alive services.

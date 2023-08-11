@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+
+  accounts:
+    image: saidiaminerepo/accounts-udemy-ms:latest
+#    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network
+    
+  loans:
+    image: saidiaminerepo/loans-udemy-ms:latest
+#    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    networks:
+      - my-network
+    
+  cards:
+    image: saidiaminerepo/cards-udemy-ms:latest
+#    mem_limit: 700m
+    ports:
+      - "9000:9000"
+    networks:
+      - my-network
+    
+networks:
+  my-network:
