@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.eazybytes.accounts.model.Customer;
 import com.eazybytes.accounts.model.Loans;
 
-@FeignClient("loans")
+@FeignClient("loans") // microservice logical name is "loans"
 public interface LoansFeignClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "myLoans", consumes = "application/json")

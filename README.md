@@ -45,3 +45,9 @@ under build>plugins>plugin>configuration to be able to build docker image with *
 
 ## Heartbeat
 A heartbeat signal is sent from each micro service (accounts loans ..) to the eureka server, to signal them that they are still alive services.
+
+## Circuit breaker pattern
+Offered by the Resilience4J project, on the accounts micro service pom.xml are the dependencies for Resilience4J
+monitors an endpoint using the annotation @CircuitBreaker & implementing the fallback method
+
+## Retry pattern
