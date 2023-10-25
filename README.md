@@ -51,3 +51,42 @@ Offered by the Resilience4J project, on the accounts micro service pom.xml are t
 monitors an endpoint using the annotation @CircuitBreaker & implementing the fallback method
 
 ## Retry pattern
+
+
+**** October course update
+Section 6 ( course 64 -> 68 ):
+- separate config from business logic
+- inject config to the needed microservice
+- maintain config in centralized repository
+
+in spring boot ecosystem, 3 ways to handle configuration declaration/injection into ms
+1) config spring boot properties and profiles
+2) applying external configuration with spring boot
+3) implementing a configuration server with spring cloud config server
+
+15 factor methodology:
+According to the 15-Factor methodology, configuration encompasses any element likely to change between deployments, such as credentials,
+resource handles, and service URLs. Cloud native applications address this challenge by maintaining the immutability of the application
+artifact across environments. Regardless of the deployment environment, the application build remains unchanged. In cloud native
+applications, each deployment involves combining the build with specific configuration data. This allows the same build to be deployed to
+multiple environments while accommodating different configuration requirements.
+
+Overview with 15 factor methodology:
+
+(github code base) ---> one build      ---> dev config  ---> Dev env
+                        for all envs   ---> QA config   ---> QA env
+                                       ---> Prod config ---> Prod env
+
+by default spring booot look for config/properties inside application.properties
+it also allows sensible overriding of config values
+
+in spring boot project, 3 ways to inject property values to the busines logic,
+1) AVOID HARD CODED using @Value
+2) AVOID HARD CODED implementing Environment interface
+3) RECOMMENDED using @ConfigurationProperties("prefix") on MyConfig (model) class and implementing getters and setters of the config values
+ ( properties will be mapped to class attributes )
+
+
+
+
+
