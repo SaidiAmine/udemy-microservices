@@ -86,6 +86,27 @@ in spring boot project, 3 ways to inject property values to the busines logic,
 3) RECOMMENDED using @ConfigurationProperties("prefix") on MyConfig (model) class and implementing getters and setters of the config values
  ( properties will be mapped to class attributes )
 
+ **** Section 6 course 69
+ Spring boot offers profile feature;
+ The default profile is always active. Spring Boot loads all
+ properties in application.properties into the default profile.
+ We can create another profiles by creating property files like
+ below,
+ application_prod.properties ---------> for prod profile
+ application_qa.properties ---------> For QA profile
+ We can activate a specific profile using spring-profiles.active
+ property like below,
+ spring.profiles.active=prod
+
+ **** Section 6 course 70
+ Externalizing configurations using command-line, JVM & environment options
+ **** SECTION 6 course 78
+ Configuring a config server, to load config properties from classpath (profile native) or load from git (profile git)
+ **** 84. Refresh configurations at runtime using refresh actuator path
+ With the help of spring actuator (after adding dependencies), upon the update of config values on the git repository
+ hit the actuator endpoint "/actuator/refresh" (with the microservice port number) to reload the config values on the microservice files,
+ this away avoid restarting the microservice to reload the external (git) configuration.
+
 
 
 
