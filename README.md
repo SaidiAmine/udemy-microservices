@@ -3,6 +3,20 @@
 * Run command docker build . -t udemy/micro-service-one (-t specifies the tag to add to the image).
 * Run a container for the image using the command `docker run image_id`
 
+## Build docker image with google jib
+* add the plugin dependency
+`<plugin>
+ 				<groupId>com.google.cloud.tools</groupId>
+ 				<artifactId>jib-maven-plugin</artifactId>
+ 				<version>3.3.2</version>
+ 				<configuration>
+ 					<to>
+ 						<image>repo-name/image-name:tag-name</image>
+ 					</to>
+ 				</configuration>
+ 			</plugin>`
+ and run the command `mvn compile jib:dockerBuild` to compile the project and generate a docker image
+
 ## Build a docker image with paketo buildpacks
 * Add xml tag to pom.xml file
 <!-- build Dockerfile/image with command: mvn spring-boot:build-image -->
@@ -106,6 +120,10 @@ in spring boot project, 3 ways to inject property values to the busines logic,
  With the help of spring actuator (after adding dependencies), upon the update of config values on the git repository
  hit the actuator endpoint "/actuator/refresh" (with the microservice port number) to reload the config values on the microservice files,
  this away avoid restarting the microservice to reload the external (git) configuration.
+ **** 85. Refresh configurations at runtime using Spring Cloud Bus
+ With the help of spring actuator & spring cloud bus & rabbitmq, refresh the configuration values for ALL microservices through
+ invoking /actuator/busrefresh on ONE microservice
+
 
 
 

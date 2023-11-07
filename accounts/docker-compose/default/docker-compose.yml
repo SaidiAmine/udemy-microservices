@@ -2,13 +2,38 @@ version: "3.8"
 
 services:
 
+  rabbit:
+    image: rabbitmq:3.12-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
   configserver:
     image: saidiaminerepo/configserver-udemy-ms:latest
     mem_limit: 700m
     ports:
       - "8071:8071"
-    networks:
-     - my-network
+#   call url and search for word "UP" on api call /actuator/health/readiness
+#   the healthcheck config below is for docker container to know when the configserver container in live & ready ( readiness & liveliness )
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
    
   eurekaserver:
     image: saidiaminerepo/eurekaserver-udemy-ms:latest
@@ -35,22 +60,11 @@ services:
     mem_limit: 700m
     ports:
       - "8080:8080"
-    networks:
-      - my-network
-    depends_on:
-      - configserver
-      - eurekaserver
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 30s
-        max_attempts: 3
-        window: 120s
     environment:
       SPRING_APPLICATION_NAME: accounts
-      SPRING_PROFILES_ACTIVE: default
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
 
 # adding an instance for microservice account / change the exposed port, the internal ports inside docker don't go on conflict as each container is resilient
 #  accounts1:
@@ -81,44 +95,22 @@ services:
     mem_limit: 700m
     ports:
       - "8090:8090"
-    networks:
-      - my-network
-    depends_on:
-      - configserver
-      - eurekaserver
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 30s
-        max_attempts: 3
-        window: 120s
     environment:
       SPRING_APPLICATION_NAME: loans
-      SPRING_PROFILES_ACTIVE: default
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
     
   cards:
     image: saidiaminerepo/cards-udemy-ms:latest
     mem_limit: 700m
     ports:
       - "9000:9000"
-    networks:
-      - my-network
-    depends_on:
-      - configserver
-      - eurekaserver
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 30s
-        max_attempts: 3
-        window: 120s
     environment:
       SPRING_APPLICATION_NAME: cards
-      SPRING_PROFILES_ACTIVE: default
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
       
 networks:
   my-network:
