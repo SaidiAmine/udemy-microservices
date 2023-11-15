@@ -1,5 +1,6 @@
 package com.eaztbytes.gatewayserver;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,30 +20,47 @@ public class GatewayserverApplication {
 		SpringApplication.run(GatewayserverApplication.class, args);
 	}
 
-	@Autowired
-	private TokenRelayGatewayFilterFactory filterFactory;
-
 	@Bean
-	public RouteLocator myRoutes(RouteLocatorBuilder builder) {
-	    return builder.routes()
-	        .route(p -> p
-	            .path("/eazybank/accounts/**")
-	            .filters(f -> f.filters(filterFactory.apply())
-					.rewritePath("/eazybank/accounts/(?<segment>.*)","/${segment}")
-					.removeRequestHeader("Cookie"))
-	            .uri("lb://ACCOUNTS")).
-	        route(p -> p
-		            .path("/eazybank/loans/**")
-					.filters(f -> f.filters(filterFactory.apply())
-							.rewritePath("/eazybank/loans/(?<segment>.*)","/${segment}")
-							.removeRequestHeader("Cookie"))
-		            .uri("lb://LOANS")).
-	        route(p -> p
-		            .path("/eazybank/cards/**")
-					.filters(f -> f.filters(filterFactory.apply())
-							.rewritePath("/eazybank/cards/(?<segment>.*)","/${segment}")
-							.removeRequestHeader("Cookie"))
-		            .uri("lb://CARDS")).build();
+	public RouteLocator udemyCustomRouteLocator(RouteLocatorBuilder builder) {
+		return builder.routes()
+				.route(p -> p.path("/udemy-ms/accounts/**") //define the path in which to add fitlers/ redefine path
+						.filters(f -> f.rewritePath("/udemy-ms/accounts/(?<segment>.*)", "/${segment}")// extract te segment and call it directly in the next method in the desired microservice
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())) // Add response header to give approx time consumed for the request
+						.uri("lb://ACCOUNTS")) // call load balancer on the ACCOUNTS microservice
+				.route(p -> p.path("/udemy-ms/loans/**")
+						.filters(f -> f.rewritePath("/udemy-ms/loans/(?<segment>.*)", "/${segment}")
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+						.uri("lb://LOANS"))
+				.route(p -> p.path("/udemy-ms/cards/**")
+						.filters(f -> f.rewritePath("/udemy-ms/cards/(?<segment>.*)", "/${segment}")
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+						.uri("lb://CARDS"))
+				.build();
 	}
+//	@Autowired
+//	private TokenRelayGatewayFilterFactory filterFactory;
+//
+//	@Bean
+//	public RouteLocator myRoutes(RouteLocatorBuilder builder) {
+//	    return builder.routes()
+//	        .route(p -> p
+//	            .path("/eazybank/accounts/**")
+//	            .filters(f -> f.filters(filterFactory.apply())
+//					.rewritePath("/eazybank/accounts/(?<segment>.*)","/${segment}")
+//					.removeRequestHeader("Cookie"))
+//	            .uri("lb://ACCOUNTS")).
+//	        route(p -> p
+//		            .path("/eazybank/loans/**")
+//					.filters(f -> f.filters(filterFactory.apply())
+//							.rewritePath("/eazybank/loans/(?<segment>.*)","/${segment}")
+//							.removeRequestHeader("Cookie"))
+//		            .uri("lb://LOANS")).
+//	        route(p -> p
+//		            .path("/eazybank/cards/**")
+//					.filters(f -> f.filters(filterFactory.apply())
+//							.rewritePath("/eazybank/cards/(?<segment>.*)","/${segment}")
+//							.removeRequestHeader("Cookie"))
+//		            .uri("lb://CARDS")).build();
+//	}
 
 }

@@ -23,3 +23,13 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+
+  microservice-eureka-config:
+    extends:
+      service: microservice-configserver-config
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+        #        service_healthy makes sure to run the test defined on the configserver service
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/

@@ -20,11 +20,10 @@ services:
 
   configserver:
     image: saidiaminerepo/configserver-udemy-ms:latest
-    mem_limit: 700m
     ports:
       - "8071:8071"
 #   call url and search for word "UP" on api call /actuator/health/readiness
-#   the healthcheck config below is for docker container to know when the configserver container in live & ready ( readiness & liveliness )
+#   the healthcheck config below is for docker container to know when the configserver container is live & ready ( readiness & liveliness )
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -37,34 +36,53 @@ services:
    
   eurekaserver:
     image: saidiaminerepo/eurekaserver-udemy-ms:latest
-    mem_limit: 700m
     ports:
       - "8070:8070"
-    networks:
-     - my-network
-    depends_on:
-      - configserver
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 15s
-        max_attempts: 3
-        window: 120s
+    healthcheck:
+      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
     environment:
-      SPRING_APPLICATION_NAME: eurekaserver
-      SPRING_PROFILES_ACTIVE: default
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
-      
+      SPRING_APPLICATION_NAME: "eurekaserver"
+
+  gatewayserver:
+    image: saidiaminerepo/gatewayserver-udemy-ms:latest
+    container_name: gatewayserver-ms
+    ports:
+      - "8072:8072"
+    depends_on:
+      accounts:
+        condition: service_healthy
+      loans:
+        condition: service_healthy
+      cards:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
   accounts:
     image: saidiaminerepo/accounts-udemy-ms:latest
-    mem_limit: 700m
     ports:
       - "8080:8080"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: accounts
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
 
 # adding an instance for microservice account / change the exposed port, the internal ports inside docker don't go on conflict as each container is resilient
 #  accounts1:
@@ -89,28 +107,37 @@ services:
 #      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
 #      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
 
-  
   loans:
     image: saidiaminerepo/loans-udemy-ms:latest
-    mem_limit: 700m
     ports:
       - "8090:8090"
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: loans
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
     
   cards:
     image: saidiaminerepo/cards-udemy-ms:latest
-    mem_limit: 700m
     ports:
       - "9000:9000"
+    healthcheck:
+      test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: cards
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
       
 networks:
   my-network:
