@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.eazybytes.accounts.model.Cards;
 import com.eazybytes.accounts.model.Customer;
 
-@FeignClient("cards") // logical pathname for the registered app
+@FeignClient(name = "cards", fallback = CardsFallback.class) // logical pathname for the registered app
 public interface CardsFeignClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "myCards", consumes = "application/json")

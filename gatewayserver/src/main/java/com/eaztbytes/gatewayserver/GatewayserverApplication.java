@@ -25,7 +25,11 @@ public class GatewayserverApplication {
 		return builder.routes()
 				.route(p -> p.path("/udemy-ms/accounts/**") //define the path in which to add fitlers/ redefine path
 						.filters(f -> f.rewritePath("/udemy-ms/accounts/(?<segment>.*)", "/${segment}")// extract te segment and call it directly in the next method in the desired microservice
-								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())) // Add response header to give approx time consumed for the request
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())// Add response header to give approx time consumed for the request
+//								.circuitBreaker(config -> config.setName("accountsCircuitBreaker") // define a circuitbreaker on the api
+//										.setFallbackUri("forward:/myAccountFallback")) // define the fallback for circuit breaker, calls an other api check class FallbackController
+//										this is on gateway level, we can defin circuit breaker on specific MS on the feign client
+						)
 						.uri("lb://ACCOUNTS")) // call load balancer on the ACCOUNTS microservice
 				.route(p -> p.path("/udemy-ms/loans/**")
 						.filters(f -> f.rewritePath("/udemy-ms/loans/(?<segment>.*)", "/${segment}")

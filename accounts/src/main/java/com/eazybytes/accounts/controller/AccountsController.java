@@ -64,7 +64,7 @@ public class AccountsController {
 	
 	@PostMapping("/myCustomerDetails")
 //	@CircuitBreaker(name = "detailsForCustomerSupportApp", fallbackMethod = "myCustomerDetailsFallBack") // annotation for circuit breaker
-	@Retry(name = "retryForCustomerDetails", fallbackMethod = "myCustomerDetailsFallBack")
+//	@Retry(name = "retryForCustomerDetails", fallbackMethod = "myCustomerDetailsFallBack")
 	public CustomerDetails myCustomerDetails(@RequestBody Customer customer) {
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
 		List<Loans> loans = loansFeignClient.getLoansDetails(customer);
