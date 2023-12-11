@@ -84,6 +84,15 @@
 <!--			<groupId>org.springframework.boot</groupId>-->
 <!--			<artifactId>spring-boot-starter-aop</artifactId>-->
 <!--		</dependency>-->
+		<!--	Below, dependency for consuming/providing stream data to event brokers (rabbitmq our case)	-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+		</dependency>
 	</dependencies>
 	
 	<dependencyManagement>
