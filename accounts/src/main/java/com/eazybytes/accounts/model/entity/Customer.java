@@ -1,4 +1,4 @@
-package com.eazybytes.accounts.model;
+package com.eazybytes.accounts.model.entity;
 
 import java.time.LocalDate;
 
@@ -24,7 +24,13 @@ public class Customer {
 	private String email;
 	@Column(name = "mobile_number")
 	private String mobileNumber;
-	@Column(name = "create_dt")
-	private LocalDate createDt;
+	@Column(name = "created_at")
+	private LocalDate createdAt;
+	@Column(name = "created_by")
+	private String createdBy;
+	@Column(name = "updated_at")
+	private LocalDate updatedAt;
+	@Column(name = "updated_by")
+	private String updatedBy;
 
 }

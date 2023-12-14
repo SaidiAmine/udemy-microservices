@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.eazybytes.accounts.model.Customer;
-import com.eazybytes.accounts.model.Loans;
+import com.eazybytes.accounts.model.entity.Customer;
+import com.eazybytes.accounts.model.entity.Loans;
 
 @FeignClient(name = "loans", fallback = LoansFallback.class) // microservice logical name is "loans"
 public interface LoansFeignClient {

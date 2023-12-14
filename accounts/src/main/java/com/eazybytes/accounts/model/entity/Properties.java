@@ -1,4 +1,4 @@
-package com.eazybytes.accounts.model;
+package com.eazybytes.accounts.model.entity;
 
 import java.util.List;
 import java.util.Map;

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.eazybytes.accounts.model.Cards;
-import com.eazybytes.accounts.model.Customer;
+import com.eazybytes.accounts.model.entity.Cards;
+import com.eazybytes.accounts.model.entity.Customer;
 
 @FeignClient(name = "cards", fallback = CardsFallback.class) // logical pathname for the registered app
 public interface CardsFeignClient {

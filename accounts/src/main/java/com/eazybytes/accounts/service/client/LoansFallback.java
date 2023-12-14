@@ -1,7 +1,7 @@
 package com.eazybytes.accounts.service.client;
 
-import com.eazybytes.accounts.model.Customer;
-import com.eazybytes.accounts.model.Loans;
+import com.eazybytes.accounts.model.entity.Customer;
+import com.eazybytes.accounts.model.entity.Loans;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

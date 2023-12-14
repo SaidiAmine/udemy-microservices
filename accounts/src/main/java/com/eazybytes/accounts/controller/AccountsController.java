@@ -4,16 +4,24 @@
 package com.eazybytes.accounts.controller;
 
 import com.eazybytes.accounts.config.AccountsServiceConfig;
-import com.eazybytes.accounts.model.*;
+import com.eazybytes.accounts.model.dto.CustomerDto;
+import com.eazybytes.accounts.model.entity.*;
+import com.eazybytes.accounts.exceptions.EntityAlreadyExistsException;
+import com.eazybytes.accounts.model.web.ResponseDto;
 import com.eazybytes.accounts.repository.AccountsRepository;
+import com.eazybytes.accounts.service.IAccountsService;
 import com.eazybytes.accounts.service.client.CardsFeignClient;
 import com.eazybytes.accounts.service.client.LoansFeignClient;
+import com.eazybytes.accounts.utils.mapper.AccountsConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +48,27 @@ public class AccountsController {
 
 	@Autowired
 	CardsFeignClient cardsFeignClient;
-	
+
+	private final IAccountsService iAccountsService;
+	private static final Logger log = LoggerFactory.getLogger(AccountsController.class);
+
+
+	@Autowired
+	public AccountsController(IAccountsService iAccountsService) {
+		this.iAccountsService = iAccountsService;
+	}
+
+	@PostMapping("/create")
+	public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
+		try {
+			iAccountsService.createAccount(customerDto);
+		} catch (EntityAlreadyExistsException e) {
+			log.info(e.getMessage());
+		}
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(new ResponseDto(AccountsConstants.STATUS_201, AccountsConstants.MESSAGE_201));
+	}
 	@PostMapping("/myAccount")
 	public Accounts getAccountDetails(@RequestBody Customer customer) {
 

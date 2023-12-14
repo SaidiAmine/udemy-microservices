@@ -1,4 +1,4 @@
-package com.eazybytes.accounts.model;
+package com.eazybytes.accounts.model.entity;
 
 import java.time.LocalDate;
 
@@ -23,7 +23,15 @@ public class Accounts {
 	private String accountType;
 	@Column(name = "branch_address")
 	private String branchAddress;
-	@Column(name = "create_dt")
-	private LocalDate createDt;
+	@Column(name = "created_at")
+	private LocalDate createdAt;
+	@Column(name = "created_by")
+	private String createdBy;
+	@Column(name = "updated_at")
+	private LocalDate updatedAt;
+	@Column(name = "updated_by")
+	private String updatedBy;
+	@Column(name = "communication_sw")
+	private boolean communicationSw;
 	
 }
