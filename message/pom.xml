@@ -62,7 +62,7 @@
 				<version>3.3.2</version>
 				<configuration>
 					<to>
-						<image>saidiaminerepo/messages-udemy-ms</image>
+						<image>saidiaminerepo/message-udemy-ms</image>
 					</to>
 				</configuration>
 			</plugin>

@@ -26,7 +26,7 @@ services:
 #   the healthcheck config below is for docker container to know when the configserver container is live & ready ( readiness & liveliness )
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
       retries: 10
       start_period: 10s
@@ -39,10 +39,10 @@ services:
     ports:
       - "8070:8070"
     healthcheck:
-      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      test: "curl --fail --silent localhost:8070/actuator/health/ | grep UP || exit 1"
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     extends:
       file: common-config.yml
@@ -74,38 +74,31 @@ services:
       - "8080:8080"
     healthcheck:
       test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
+    depends_on:
+      rabbit:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: accounts
+      SPRING_RABBITMQ_HOST: "rabbit"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
 
-# adding an instance for microservice account / change the exposed port, the internal ports inside docker don't go on conflict as each container is resilient
-#  accounts1:
-#    image: saidiaminerepo/accounts-udemy-ms:latest
-#    mem_limit: 700m
-#    ports:
-#      - "8081:8080"
-#    networks:
-#      - my-network
-#    depends_on:
-#      - configserver
-#      - eurekaserver
-#    deploy:
-#      restart_policy:
-#        condition: on-failure
-#        delay: 30s
-#        max_attempts: 3
-#        window: 120s
-#    environment:
-#      SPRING_APPLICATION_NAME: accounts
-#      SPRING_PROFILES_ACTIVE: default
-#      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
-#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+  message:
+    image: saidiaminerepo/message-udemy-ms:latest
+    container_name: message-ms
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    environment:
+      SPRING_RABBITMQ_HOST: "rabbit"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   loans:
     image: saidiaminerepo/loans-udemy-ms:latest
@@ -141,3 +134,4 @@ services:
       
 networks:
   my-network:
+    driver: "bridge"
