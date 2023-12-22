@@ -1,0 +1,25 @@
+kubectl -n kubernetes-dashboard create token admin-user
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+kubectl proxy
+
+kubectl apply -f C:\K8s\configmaps.yaml
+
+# deletes the deployment only (without the service)
+kubectl delete -n default deployment configserver-deployment
+
+# deletes the types inside the file (deploiment + service)
+kubectl delete -f configserver.yml
+
+kubectl describe pod
+
+kubectl scale deployment accounts-deployment --replicas=2
+
+kubectl set image deployment gatewayserver-deployment gatewayserver=saidiaminerepo/gatewayserverr --record
+kubectl get pods
+kubectl get events
+kubectl get services
+kubectl get deployments
+kubectl get services
+kubectl get replicaset
+
+doskey /HISTORY > history.txt
